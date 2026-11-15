@@ -233,7 +233,7 @@ Resources:
         Fn::GetAtt:
           - QBusinessAppConstructQBusinessHandleAppChangesframeworkonEventServiceRole3768E106
           - Arn
-      Runtime: nodejs18.x
+      Runtime: nodejs22.x
       Timeout: 900
     DependsOn:
       - layerWithQBusinessB00C1A25
@@ -315,7 +315,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Handler: index.handler
-      Runtime: nodejs18.x
+      Runtime: nodejs22.x
       Timeout: 900
       Code:
         S3Bucket:
@@ -1427,7 +1427,7 @@ Resources:
         Fn::GetAtt:
           - AwsBatchConstructQBuinessSubmitJobLambdaProviderframeworkonEventServiceRole401FA607
           - Arn
-      Runtime: nodejs18.x
+      Runtime: nodejs22.x
       Timeout: 900
     DependsOn:
       - AwsBatchConstructQBuinessSubmitJobLambdaProviderframeworkonEventServiceRoleDefaultPolicyA0325A61
@@ -1517,7 +1517,7 @@ Resources:
         Fn::GetAtt:
           - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
           - Arn
-      Runtime: nodejs18.x
+      Runtime: nodejs22.x
       Description:
         Fn::Join:
           - ""
@@ -1679,7 +1679,7 @@ Resources:
         Fn::GetAtt:
           - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
           - Arn
-      Runtime: nodejs18.x
+      Runtime: nodejs22.x
       Description: Lambda function for removing all inbound/outbound rules from the VPC default security group
     DependsOn:
       - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
