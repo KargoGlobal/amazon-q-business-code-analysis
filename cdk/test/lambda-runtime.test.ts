@@ -6,13 +6,14 @@ import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { QBusinessCodeAnalysisStack } from '../lib/q-business-code-analysis-stack';
 
-const EOL_NODE = /^nodejs(1[0-9]|20)\.x$/;
+// Allowlist: any nodejs* runtime must be a patched one, so old/odd identifiers (nodejs8.10, quoted values) fail closed.
+const isUnpatchedNode = (rt: string) => rt.startsWith('nodejs') && !/^nodejs(22|24|26)\.x$/.test(rt);
 
 test('shipped assets/cloudformation.yml has no EOL Node runtimes', () => {
   const text = fs.readFileSync(path.join(__dirname, '../../assets/cloudformation.yml'), 'utf8');
-  const runtimes = [...text.matchAll(/^\s*Runtime:\s*(\S+)\s*$/gm)].map((m) => m[1]);
+  const runtimes = [...text.matchAll(/^\s*Runtime:\s*(\S+)\s*$/gm)].map((m) => m[1].replace(/["']/g, ''));
   expect(runtimes.length).toBeGreaterThan(0);
-  expect(runtimes.filter((r) => EOL_NODE.test(r))).toEqual([]);
+  expect(runtimes.filter(isUnpatchedNode)).toEqual([]);
 });
 
 test('synthesized stack has no EOL Node runtimes', () => {
@@ -23,6 +24,6 @@ test('synthesized stack has no EOL Node runtimes', () => {
   const fns = Object.values(Template.fromStack(stack).findResources('AWS::Lambda::Function'));
   expect(fns.length).toBeGreaterThan(0);
   for (const fn of fns) {
-    expect((fn as any).Properties.Runtime).not.toMatch(EOL_NODE);
+    expect(isUnpatchedNode((fn as any).Properties.Runtime)).toBe(false);
   }
 });
